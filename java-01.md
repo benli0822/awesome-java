@@ -1,4 +1,4 @@
-原文链接()[https://juejin.im/entry/5c6a0a04f265da2de660f839]
+[原文链接](https://juejin.im/entry/5c6a0a04f265da2de660f839)
 
 # 基础篇
 
@@ -48,6 +48,27 @@ Procedure Oriented Programming POP是一种把计算机程序视作一系列命�
 
 ### 多态 Polymorphism
 
+### 重写和重载
+
+重写 Overrive
+
+重载 Overloading：让一个类以统一的方式吃力不同数据类型的手段，Java中就是一个类中可以有多个同名方法，但是他们具有不同的参数类型和个数定义。
+
+```java
+public class TestSample {
+
+    public void test(final int a) {
+        // Do nothing
+    }
+
+    public void test(final int a, final int b) {
+        // Do nothing
+    }
+}
+```
+
+
+
 程序定义的一个引用变量倒底会指向哪个类的实例对象，该引用变量发出的方法调用到底是哪个类中实现的方法，必须在由程序运行期间才能决定。
 
 实现多态在Java中必须具备并满足三个必要条件
@@ -66,4 +87,63 @@ Procedure Oriented Programming POP是一种把计算机程序视作一系列命�
 
 # 平台无关性
 
-## Java是如何实现平台无关的
+## Java是如何实现平台无关性
+
+Java Runtime Enviroment JRE, 提供了Java跨平台运行上层开发程序的环境
+Java Virutal Machine JVM
+Java Developemtn Kit JDK
+
+## JVM 支持的其他语言
+
+Kotlin, Groovy, JRuby, Jython, Scala
+
+都是通过编译器编译成Class文件在JVM上运行。
+
+# 值传递
+
+## 值传递和引用传递
+
+值传递，传递的参数是按照值得拷贝传递。传递完成之后互不相干。不会更改局部变量中的值。
+
+```java
+public class TempTest {
+    private void test1(int a) {
+        a = 5;
+        System.out.println("a in test method = " + a);
+    }
+
+    public static void main(String[] args) {
+        TempTest t = new TempTest();
+        int a = 3;
+        t.test1(a);
+        System.out.println("a in main = " + a);
+    }
+}
+```
+
+引用传递，变量对应的内存空间地址传递，指针传递。
+
+```java
+public class TempTest {
+
+    private Date testDate;
+
+    public void setDate(final Date paramDate) {
+        if (null == paramDate) {
+            this.testDate = null;
+        } else {
+            this.testDate = (Date) paramDate.clone();
+        }
+    }
+}
+```
+
+上面这样写是为了杜绝成员变量testDate的引用传递。
+
+## 为什么说java中只有值传递。
+
+[链接](https://blog.csdn.net/bjweimengshu/article/details/79799485)
+
+所以，值传递和引用传递的区别并不是传递的内容。而是实参到底有没有被复制一份给形参。
+所以说，Java中其实还是值传递的，只不过对于对象参数，值的内容是对象的引用。
+无论是值传递还是引用传递，其实都是一种求值策略(Evaluation strategy)，而按共享传递其实只是按值传递的一个特例罢了。
