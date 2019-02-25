@@ -73,3 +73,6 @@ c == d // false
 
 [链接](https://blog.csdn.net/u010133536/article/details/42492633)
 [链接](https://blog.csdn.net/u013796619/article/details/30540589)
+
+### substring 方法在JDK6和JDK7中的分别
+
