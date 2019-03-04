@@ -41,7 +41,7 @@ Comppsition provides a more flexible ways regarding the inheritance.
 
 Any changes on item 1. will reflect on item 2.
 
-Inheritance means a type, the same behavior pattern. Messages sent to base class can also be sent to derived class. The derived class should expect the same pattern behvoir by default inherited from it's parent class, unless overriding happens;
+Inheritance means a type, the same behavior pattern. Messages sent to base class can also be sent to derived class. The derived class should expect the same pattern behvoir by default inherited from its parent class, unless overriding happens;
 
 2 ways for differentiate a base class and its dervied class:
 
@@ -59,3 +59,5 @@ By making an is-like-a statement, we translate the inheriance as 'The heat pump 
 
 ## Interchangeable objects with polymorphism
 
+Early binding: the compiler generate a call to a specific function name, the runtime system resolves this call to the absolute address of the code to be executed.
+Late binding: the code being called isn't determined until runtime. When sending a message to an object, the object actually does figure out what to do with that message.
