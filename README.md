@@ -9,3 +9,8 @@
 
 [Java基础篇-01：基本特性， 基本原则，基本知识](/docs/java-01.md)
 
+[Java基础篇-02：基本类型，字符串](/docs/java-02.md)
+
+- [substring()方法在不同版本的jdk中的不同实现](/docs/java-02.md#substring()方法在不同版本的jdk中的不同实现)
+
+[Java基础篇-03：关键字](/docs/java-03.md)
