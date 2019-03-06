@@ -1,0 +1,4 @@
+# This is the git ignore file for folder https://github.com/benli0822/awesome-java
+
+# Remove all diagrams files
+/diagram
