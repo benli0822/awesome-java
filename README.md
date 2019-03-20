@@ -13,4 +13,10 @@
 
 - [substring()方法在不同版本的jdk中的不同实现](/docs/java-02.md#substring()方法在不同版本的jdk中的不同实现)
 
-[Java基础篇-03：关键字](/docs/java-03.md)
+[Java基础篇-03：关键字-01，内存模型，JVM内存模型](/docs/java-03.md)
+
+- [transient, Externalizable, Serializable 关键字](/docs/java-03.md#transient)
+- [instanceof 关键字](/docs/java-03.md#instanceof)
+- [final 关键字, 静态绑定和动态绑定](/docs/java-03.md#final)
+- [static 关键字](/docs/java-03.md#static)
+- [volatile 关键字](/docs/java-03.md#volatile前置知识)

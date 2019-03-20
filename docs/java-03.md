@@ -1,6 +1,6 @@
-# Java基础篇-03：关键字，内存模型，JVM内存模型
+# Java基础篇-03：关键字-01，内存模型，JVM内存模型
 
-## 关键字
+## 关键字-01
 
 ### transient
 
@@ -347,6 +347,11 @@ public VolatileAtomicTest {
             }.start();
         }
 
+        // https://blog.csdn.net/xiaolinzi007/article/details/44487851
+        // https://blog.csdn.net/u013164931/article/details/80498880
+        // 注意如果用Intelij idea 执行这段代码请用
+        // while(Thread.activeCount() > 2) {
+        // 简单来说，Intellij在debug的时候会启用守护线程
         while(Thread.activeCount() > 1) {
             Thread.yield();
         }
@@ -355,3 +360,131 @@ public VolatileAtomicTest {
 }
 ```
 
+先自问一个问题，以上程序做了什么？
+
+主程序创建了10个独立的线程，用来操作同一个对象执行对象成员方法increase对对象成员变量进行自增操作。
+接下来的问题是，最后的命令行输出是```10*1000=10000```么？
+
+答案是否定的，原因在于这里做的自增操作并不是一个原子操作，前文中提到自增操作实际上是分为两步来做的：读取并自增。所以说这段程序中，单纯的用volatile关键字修饰变量并进行多线程自增操作，是存在线程安全问题的。
+
+![java-03-volatile-cpu-model](/img/java-03-volatile-cpu-model.png)
+
+[图片原文链接](http://www.cnblogs.com/aigongsi/archive/2012/04/01/2429166.html)
+
+从上图中可以看出，举个栗子如果线程处于use阶段中变量中的内容已经被其他线程所修改，那么自然最终程序运行的结果是不正确的。
+回到之前讨论的定义，volatile关键字修饰的变量jvm只会保证修改后的值会立即同步到主存当中，同时其他线程在读取这个变量值得时候可以取到最新的值。
+
+上述代码可以有以下三种修改方法。
+
+
+```java
+public VolatileAtomicTest {
+
+    public volatile int i = 0;
+
+    // 加方法锁
+    public synchronized void increase() {
+        i++;
+    }
+
+    public static void main(String[] args) {
+        final VolatileAtomicTest test = new VolatileAtomicTest();
+        for(int j = 0; j < 10; j++) {
+            new Thread() {
+                public void run() {
+                    for(int k = 0; k < 1000; k++) {
+                        test.increase();
+                    }
+                }
+            }.start();
+        }
+
+        // https://blog.csdn.net/xiaolinzi007/article/details/44487851
+        // https://blog.csdn.net/u013164931/article/details/80498880
+        // 注意如果用Intelij idea 执行这段代码请用
+        // while(Thread.activeCount() > 2) {
+        // 简单来说，Intellij在debug的时候会启用守护线程
+        while(Thread.activeCount() > 1) {
+            Thread.yield();
+        }
+        System.out.println(test.i);
+    }
+}
+```
+
+```java
+public VolatileAtomicTest {
+
+    public volatile int i = 0;
+    // 采用Lock
+    private Lock lock = new ReetrantLock();
+
+    public void increase() {
+        lock.lock();
+        try {
+            i++;
+            } finally {
+                lock.unlock();
+            }
+    }
+
+    public static void main(String[] args) {
+        final VolatileAtomicTest test = new VolatileAtomicTest();
+        for(int j = 0; j < 10; j++) {
+            new Thread() {
+                public void run() {
+                    for(int k = 0; k < 1000; k++) {
+                        test.increase();
+                    }
+                }
+            }.start();
+        }
+
+        // https://blog.csdn.net/xiaolinzi007/article/details/44487851
+        // https://blog.csdn.net/u013164931/article/details/80498880
+        // 注意如果用Intelij idea 执行这段代码请用
+        // while(Thread.activeCount() > 2) {
+        // 简单来说，Intellij在debug的时候会启用守护线程
+        while(Thread.activeCount() > 1) {
+            Thread.yield();
+        }
+        System.out.println(test.i);
+    }
+}
+```
+
+
+```java
+public VolatileAtomicTest {
+
+    // 支持原子CAS循环的AtomicInteger
+    public AtomicInteger i = new AtomicInteger();
+
+    public void increase() {
+        i.getAndIncrement();
+    }
+
+    public static void main(String[] args) {
+        final VolatileAtomicTest test = new VolatileAtomicTest();
+        for(int j = 0; j < 10; j++) {
+            new Thread() {
+                public void run() {
+                    for(int k = 0; k < 1000; k++) {
+                        test.increase();
+                    }
+                }
+            }.start();
+        }
+
+        // https://blog.csdn.net/xiaolinzi007/article/details/44487851
+        // https://blog.csdn.net/u013164931/article/details/80498880
+        // 注意如果用Intelij idea 执行这段代码请用
+        // while(Thread.activeCount() > 2) {
+        // 简单来说，Intellij在debug的时候会启用守护线程
+        while(Thread.activeCount() > 1) {
+            Thread.yield();
+        }
+        System.out.println(test.i);
+    }
+}
+```
