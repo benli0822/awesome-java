@@ -162,7 +162,7 @@ Java中没有全局变量的概念，可以简单地把static关键词修饰理�
 
 [链接](https://www.cnblogs.com/Qian123/p/5713440.html)
 
-### volatile
+### volatile前置知识
 
 #### 系统内存模型
 
@@ -297,4 +297,61 @@ System.out.println(counter); // Thread B
 
 Java中通过happens-before原则保证这一系列动作的发生，
 
+- 程序次序规则：同一线程内，按照代码循序，书写在前面的代码操作会先行发生于书写在后面的操作。
+- 锁定规则：一个unLock操作先行发生于后面对同一个锁的Lock操作。
+- volatile变量规则：对一个变量的写操作先行发生于对这个变量的读操作。
+- 传递规则：如果操作A先行发生于操作B，而操作B又先行发生于操作C，则可以得出操作A先行发生于操作C。
+- 线程启动规则：Thread对象的start()方法先行发生于此线程的每个一个动作。
+- 线程中断规则：对线程interrupt()方法的调用先行发生于被中断线程的代码检测到中断事件的发生。
+- 线程终结规则：线程中所有的操作都先行发生于线程的终止检测，我们可以通过Thread.join()方法结束、Thread.isAlive()的返回值手段检测到线程已经终止执行。
+- 对象终结规则：一个对象的初始化完成先行发生于他的finalize()方法的开始。
+
+### volatile关键字
+
+#### 作用域
+
+- 类的成员变量
+- 类的静态成员变量
+
+#### 语义
+
+- 保证了不同线程之间对变量操作的可见性
+- 禁止进行指令重排序
+
+volatile包含了以下操作：
+
+- 对使用volatile关键字修饰的的变量的修改会立即被写入主存；
+- 不同线程对volatile关键字修饰的变量进行修改的时候，会导致其他线程中对变量的工作缓存失效。（也就是CPU中L1或者L2缓存中对应的缓存行失效；
+- 由于对volatile关键字修饰的变量进行修改的时候会立即让其他工作缓存中的缓存行失效，对应第一步其他CPU线程会立即请求主存并重新加载volatile变量。
+
+##### volatile的原子性
+
+```java
+public VolatileAtomicTest {
+
+    public volatile int i = 0;
+
+    public void increase() {
+        i++;
+    }
+
+    public static void main(String[] args) {
+        final VolatileAtomicTest test = new VolatileAtomicTest();
+        for(int j = 0; j < 10; j++) {
+            new Thread() {
+                public void run() {
+                    for(int k = 0; k < 1000; k++) {
+                        test.increase();
+                    }
+                }
+            }.start();
+        }
+
+        while(Thread.activeCount() > 1) {
+            Thread.yield();
+        }
+        System.out.println(test.i);
+    }
+}
+```
 
