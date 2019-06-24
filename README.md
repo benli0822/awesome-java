@@ -20,3 +20,8 @@
 - [final 关键字, 静态绑定和动态绑定](/docs/java-03.md#final)
 - [static 关键字](/docs/java-03.md#static)
 - [volatile 关键字](/docs/java-03.md#volatile前置知识)
+
+[Java基础篇-04：关键字-02](/docs/java-04.md)
+
+- [synchronized](/docs/java-04.md#synchronized)
+  - [Java中的锁机制](/docs/java-04.md#Java中的锁机制)
