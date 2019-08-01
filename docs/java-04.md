@@ -58,3 +58,19 @@
 |  互斥锁  |      |      |      |      |      |          |          |
 
 ### const
+
+
+### 死锁 
+
+死锁表现的是一种多方竞争资源造成的一种相互阻塞的僵局状态。
+想象一下十字路口信号灯损坏造成堵塞的情况，如果没有交警介入，早高峰的时候将会造成重大堵塞并持续往外部蔓延。
+
+类比交通阻塞的情况，以Java程序为例，我们考量多线程运行环境下造成死锁的情况。
+
+![java-04-dead-lock](/img/java-04-dead-lock.png)
+
+我们使用两个线程：Thread A, Thread B，并创建两个锁资源Lock A, Lock B来模拟上图场景。
+
+1. 首先让Thread A获取Lock A，Thread B获取Lock B，这个动作同时发起。
+2. 接着让Thread A获取Lock B，Thread B获取Lock A，这个动作同时发起。
+
