@@ -20,7 +20,7 @@ public class DeadLockDemo {
 
                     synchronized(lockB) {
                         System.out.println(currentThreadName + ": has got lock b");
-                        System.out.pringln(currentThreadName + ": say Hello!");
+                        System.out.println(currentThreadName + ": say Hello!");
                     }
                 }
             }
@@ -42,7 +42,7 @@ public class DeadLockDemo {
 
                     synchronized(lockA) {
                         System.out.println(currentThreadName + ": has got lock a");
-                        System.out.pringln(currentThreadName + ": say Hello!");
+                        System.out.println(currentThreadName + ": say Hello!");
                     }
                 }
             }
