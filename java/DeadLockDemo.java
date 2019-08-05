@@ -1,9 +1,16 @@
+/**
+ * A sample java code for demonstrating the dead lock scenario.
+ * 
+ * Author: Justilise
+ * Created On: 2019-08-01
+ */
 public class DeadLockDemo {
 
     public static void main(String[] args) {
         Object lockA = new Object();
         Object lockB = new Object();
 
+        // Create the first thread and start it.
         new Thread(new Runnable(){
         
             @Override
@@ -26,6 +33,7 @@ public class DeadLockDemo {
             }
         }, "Thread A").start();
 
+        // Create the second thread and start it.
         new Thread(new Runnable(){
         
             @Override

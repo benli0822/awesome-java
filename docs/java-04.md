@@ -74,3 +74,56 @@
 1. 首先让Thread A获取Lock A，Thread B获取Lock B，这个动作同时发起。
 2. 接着让Thread A获取Lock B，Thread B获取Lock A，这个动作同时发起。
 
+[DeadLockDemo.java](/java/DeadLockDemo.java)
+
+从以上程序分析，造成死锁的原因是因为线程AB各自占有锁AB，并在未释放的情况下想去获取对方手上的锁，进而造成死锁。
+
+归根结底，死锁的情况出现于
+
+#### Windows内对死锁的分析监控
+
+按照执行步骤操作。
+通过编译执行java程序获得死锁。
+接着另起一个窗口，获取进程PID，并通过jstack可以获得程序执行过程中详细的信息。
+
+
+
+```CMD
+-- Console 1 执行程序创建死锁
+cd ./java
+javac DeadLockDemo.java
+java DeadLockDemo
+
+-- Console 2 通过jstack检测查看死锁信息
+tasklist | find /i "java.exe"
+jstack -p 17940
+```
+
+```CMD
+Found one Java-level deadlock:
+=============================
+"Thread B":
+  waiting to lock monitor 0x00000000058b91f8 (object 0x0000000780aefc38, a java.lang.Object),
+  which is held by "Thread A"
+"Thread A":
+  waiting to lock monitor 0x00000000058bbb38 (object 0x0000000780aefc48, a java.lang.Object),
+  which is held by "Thread B"
+
+Java stack information for the threads listed above:
+===================================================
+"Thread B":
+        at DeadLockDemo$2.run(DeadLockDemo.java:52)
+        - waiting to lock <0x0000000780aefc38> (a java.lang.Object)
+        - locked <0x0000000780aefc48> (a java.lang.Object)
+        at java.lang.Thread.run(Thread.java:748)
+"Thread A":
+        at DeadLockDemo$1.run(DeadLockDemo.java:29)
+        - waiting to lock <0x0000000780aefc48> (a java.lang.Object)
+        - locked <0x0000000780aefc38> (a java.lang.Object)
+        at java.lang.Thread.run(Thread.java:748)
+
+Found 1 deadlock.
+```
+
+参考
+[在Windows下，利用tasklist與taskkill來刪除Process](https://blog.twtnn.com/2013/11/windowstasklisttaskkillprocess.html)
