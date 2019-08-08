@@ -153,12 +153,26 @@ Found 1 deadlock.
 - 可剥夺资源：即当某进程获得了部分资源，但得不到其它资源，则释放已占有的资源（破坏不可剥夺条件）
 - 资源有序分配法：系统给每类资源赋予一个编号，每一个进程按编号递增的顺序请求资源，释放则相反（破坏环路等待条件）
 
+
 1. 对锁资源进行排序获取锁
 
 这也是对锁资源的一种集中管理。
 -> 保证任何线程获取锁的顺序是相同的。
 
-1. 设定持有锁的超时时间
+[LockInSequenceDemo.java](/java/LockInSequenceDemo.java)
+
+```zsh
+╭─ OSX    …/awesome-java/java   master ● ●  
+╰ java LockInSequenceDemo                                                                                                                     0.56 Dur  ✔   08:41    08.08.19
+[2019-08-08T20:41:13.208] Thread A: has got lock 1, next trying to acquire lock 2
+[2019-08-08T20:41:16.213] Thread A: has got lock 2
+[2019-08-08T20:41:16.213] Thread A: say Hello!
+[2019-08-08T20:41:16.213] Thread B: has got lock 1, next trying to acquire lock 2
+[2019-08-08T20:41:19.218] Thread B: has got lock 2
+[2019-08-08T20:41:19.219] Thread B: say Hello!
+```
+
+2. 设定持有锁的超时时间
 
 Java中的Lock接口定义了tryLock方法。
 ![java-04-dead-lock-java-lock-interface](/img/java-04-dead-lock-java-lock-interface.png)
@@ -170,9 +184,6 @@ boolean tryLock(long time,
 ```
 
 通过参数定义可以看出，Lock接口实现类可以通过调用的形式锁定锁对象，并规定多长时间之后主动释放锁资源。
-
-
-
 
 #### 避免死锁
 

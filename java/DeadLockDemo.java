@@ -1,8 +1,7 @@
 /**
  * A sample java code for demonstrating the dead lock scenario.
  * 
- * Author: Justilise
- * Created On: 2019-08-01
+ * Author: Justilise Created On: 2019-08-01
  */
 public class DeadLockDemo {
 
@@ -11,12 +10,12 @@ public class DeadLockDemo {
         Object lockB = new Object();
 
         // Create the first thread and start it.
-        new Thread(new Runnable(){
-        
+        new Thread(new Runnable() {
+
             @Override
             public void run() {
                 String currentThreadName = Thread.currentThread().getName();
-                synchronized(lockA) {
+                synchronized (lockA) {
                     System.out.println(currentThreadName + ": has got lock a, next trying to acquire lock b");
 
                     try {
@@ -25,7 +24,7 @@ public class DeadLockDemo {
                         exception.printStackTrace();
                     }
 
-                    synchronized(lockB) {
+                    synchronized (lockB) {
                         System.out.println(currentThreadName + ": has got lock b");
                         System.out.println(currentThreadName + ": say Hello!");
                     }
@@ -34,12 +33,12 @@ public class DeadLockDemo {
         }, "Thread A").start();
 
         // Create the second thread and start it.
-        new Thread(new Runnable(){
-        
+        new Thread(new Runnable() {
+
             @Override
             public void run() {
                 String currentThreadName = Thread.currentThread().getName();
-                synchronized(lockB) {
+                synchronized (lockB) {
                     System.out.println(currentThreadName + ": has got lock b, next trying to acquire lock a");
 
                     try {
@@ -48,7 +47,7 @@ public class DeadLockDemo {
                         exception.printStackTrace();
                     }
 
-                    synchronized(lockA) {
+                    synchronized (lockA) {
                         System.out.println(currentThreadName + ": has got lock a");
                         System.out.println(currentThreadName + ": say Hello!");
                     }
